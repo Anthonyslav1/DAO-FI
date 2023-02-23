@@ -11,7 +11,7 @@ import "@openzeppelin/contracts/utils/cryptography/SignatureChecker.sol";
 
 
 contract IdentifyNFT is ERC721Enumerable, Ownable {
-
+Identify [] public identity;
   
   using Strings for uint256;
 
@@ -35,7 +35,21 @@ contract IdentifyNFT is ERC721Enumerable, Ownable {
   }
 
 
+ struct Identify{ 
 
+       
+ string Name;
+  string  Desc;
+   string DOB;
+    string  _HOMEaddress;
+     int NIN;
+      int PhoneNo;
+       string  Email;
+        string  Occupation;
+  string  Nationality ;
+  address fromAddress;
+
+   } 
  function walletOfOwner(address _owner)
     public
     view
@@ -48,13 +62,19 @@ contract IdentifyNFT is ERC721Enumerable, Ownable {
     }
     return tokenIds;
   }
+
+  function Details(uint tokenId) public view returns (Identify memory){
+    uint number = tokenId - 1;
+    require (number < identity.length, "invalid entry");
+    return identity[number];
+  }
   // internal
   function _baseURI() internal view virtual override returns (string memory) {
     return baseURI;
   }
 
   // public
-  function mint(uint256 _mintAmount) public payable {
+  function mint(uint256 _mintAmount, string memory prefName, string memory prefDesc, string memory _DOB, string memory __HOMEaddress, int _NIN, int _PhoneNo, string memory _Email, string memory _Occupation, string memory _Nationality ) public payable {
     uint256 supply = totalSupply();
     require(!paused);
     
@@ -62,7 +82,18 @@ contract IdentifyNFT is ERC721Enumerable, Ownable {
   
    require(balanceOf(msg.sender) <= 0, "One identity per person");
 
-  
+    identity.push(Identify({
+            Name: prefName,
+            Desc: prefDesc,
+   DOB : _DOB,
+    _HOMEaddress : __HOMEaddress,
+     NIN : _NIN,
+       PhoneNo: _PhoneNo,
+         Email : _Email,
+          Occupation : _Occupation,
+   Nationality : _Nationality,
+   fromAddress : msg.sender
+        }));
 
 
 
